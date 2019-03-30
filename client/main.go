@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 
 	color "github.com/fatih/color"
 )
@@ -26,7 +27,7 @@ func main() {
 	color.Cyan("Enter your username:")
 	reader := bufio.NewReader(os.Stdin)
 	username, _ := reader.ReadString('\n')
-	username = username[:len(username)-1]
+	username = strings.Trim(username, " \r\n")
 
 	welcomeMsg := fmt.Sprintf("Welcome %s, say hi to your friends:\n", username)
 	color.Magenta(welcomeMsg)
@@ -36,14 +37,8 @@ func main() {
 }
 
 func read(connection net.Conn) {
-
-	reader := bufio.NewReader(connection)
-	x, _ := reader.ReadString('\n')
-
-	color.Yellow(x)
-
 	for {
-		reader = bufio.NewReader(connection)
+		reader := bufio.NewReader(connection)
 		message, err := reader.ReadString('\n')
 
 		if err == io.EOF {
@@ -66,7 +61,7 @@ func write(connection net.Conn, username string) {
 		}
 
 		message = fmt.Sprintf("%s: %s\n", username,
-			message[:len(message)-1])
+			strings.Trim(message, " \r\n"))
 
 		connection.Write([]byte(message))
 	}
