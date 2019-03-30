@@ -53,13 +53,6 @@ func main() {
 }
 
 func broadcastMessage(conn net.Conn) {
-
-	for item := range openConnections {
-		// if item != conn {
-		item.Write([]byte("New user has joined"))
-		// }
-	}
-
 	for {
 		reader := bufio.NewReader(conn)
 		message, err := reader.ReadString('\n')
